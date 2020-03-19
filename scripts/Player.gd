@@ -9,6 +9,9 @@ var score = 0
 
 var can_shoot = true
 
+var bullet = "res://scenes/Bullet.tscn"
+var impact = "res://scenes/Impact.tscn"
+
 puppet var puppet_transform = null
 puppet var puppet_camera_rotation = null
 
@@ -70,10 +73,11 @@ func other_abilities():
 		if can_shoot:
 			can_shoot = false
 			$FireRate.start()
-			rpc("shoot_sound")
-			
+			rpc("shoot", $Camera/BulletPosition.global_transform, $Camera/BulletPosition.global_transform.basis.z)
 			if $Camera/RayCast.is_colliding():
 				var target = $Camera/RayCast.get_collider()
+				
+				rpc("impact", $Camera/RayCast.get_collision_point() )
 				
 				if target.has_method("damaged"):
 					target.rpc("damaged")
@@ -83,8 +87,24 @@ func other_abilities():
 	if Input.is_action_just_pressed("ui_cancel"):
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
-remotesync func shoot_sound():
+remotesync func impact(position):
+	var impact_instance = load(impact).instance()
+	impact_instance.global_transform.origin = position
+	get_tree().get_root().get_node("Map").add_child(impact_instance)
+	yield(get_tree().create_timer(2), "timeout")
+	impact_instance.queue_free()
+
+remotesync func shoot(emitter, direction):
 	$Camera/ShootSound.play()
+	
+	var bullet_instance = load(bullet).instance()
+	
+	get_tree().get_root().get_node("Map").add_child(bullet_instance)
+	bullet_instance.global_transform = emitter
+	bullet_instance.linear_velocity = direction * - 500
+	yield(get_tree().create_timer(2), "timeout")
+	bullet_instance.queue_free()
+	
 
 remotesync func scored():
 	score += 1

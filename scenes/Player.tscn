@@ -53,6 +53,9 @@ stream = ExtResource( 4 )
 unit_db = -20.0
 unit_size = 100.0
 
+[node name="BulletPosition" type="Position3D" parent="Camera"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1 )
+
 [node name="HUD" type="Control" parent="."]
 visible = false
 anchor_right = 1.0
@@ -87,6 +90,6 @@ __meta__ = {
 }
 
 [node name="FireRate" type="Timer" parent="."]
-wait_time = 0.4
+wait_time = 0.3
 one_shot = true
 [connection signal="timeout" from="FireRate" to="." method="_on_FireRate_timeout"]
