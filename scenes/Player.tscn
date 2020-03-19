@@ -85,3 +85,8 @@ text = "Score: 0"
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="FireRate" type="Timer" parent="."]
+wait_time = 0.4
+one_shot = true
+[connection signal="timeout" from="FireRate" to="." method="_on_FireRate_timeout"]

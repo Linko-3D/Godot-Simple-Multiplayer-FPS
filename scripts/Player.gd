@@ -7,6 +7,8 @@ var jump_force = 6.5
 var health = 100
 var score = 0
 
+var can_shoot = true
+
 puppet var puppet_transform = null
 puppet var puppet_camera_rotation = null
 
@@ -65,15 +67,18 @@ func other_abilities():
 	if Input.is_action_just_pressed("shoot"):
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 		
-		rpc("shoot_sound")
-		
-		if $Camera/RayCast.is_colliding():
-			var target = $Camera/RayCast.get_collider()
+		if can_shoot:
+			can_shoot = false
+			$FireRate.start()
+			rpc("shoot_sound")
 			
-			if target.has_method("damaged"):
-				target.rpc("damaged")
-				if target.health == 0:
-					rpc("scored")
+			if $Camera/RayCast.is_colliding():
+				var target = $Camera/RayCast.get_collider()
+				
+				if target.has_method("damaged"):
+					target.rpc("damaged")
+					if target.health == 0:
+						rpc("scored")
 
 	if Input.is_action_just_pressed("ui_cancel"):
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
@@ -90,3 +95,7 @@ remotesync func respawn():
 
 remotesync func damaged():
 	health -= 25
+
+
+func _on_FireRate_timeout():
+	can_shoot = true
