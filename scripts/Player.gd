@@ -4,6 +4,8 @@ var movement = Vector3()
 var speed = 10
 var jump_force = 6.5
 
+var health = 100
+
 puppet var puppet_transform = null
 puppet var puppet_camera_rotation = null
 
@@ -12,9 +14,18 @@ func _ready():
 		$Camera.current = true
 		$Camera/HeadOrientation.visible = false
 		$HUD.visible = true
+		$Camera/RayCast.enabled = true
+		$Camera/RayCast.add_exception(self)
 
 func _physics_process(delta):
 	if is_network_master():
+		
+		$HUD/Health.text = str(health)
+		
+		if health <= 0:
+			rpc("respawn")
+		
+		
 		var direction_2D = Vector2()
 		direction_2D.y = Input.get_action_strength("backward") - Input.get_action_strength("forward")
 		direction_2D.x = Input.get_action_strength("right") - Input.get_action_strength("left")
@@ -51,6 +62,19 @@ func _input(event):
 func other_abilities():
 	if Input.is_action_just_pressed("shoot"):
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+		
+		if $Camera/RayCast.is_colliding():
+			var target = $Camera/RayCast.get_collider()
+			
+			if target.has_method("damaged"):
+				target.rpc("damaged")
 
 	if Input.is_action_just_pressed("ui_cancel"):
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+
+remotesync func respawn():
+	health = 100
+	global_transform = get_tree().get_root().find_node("Spawn", true, false). global_transform
+
+remotesync func damaged():
+	health -= 25

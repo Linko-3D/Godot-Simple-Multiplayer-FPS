@@ -23,6 +23,10 @@ config/icon="res://icon.png"
 
 Network="*res://scripts/Network.gd"
 
+[display]
+
+window/size/resizable=false
+
 [input]
 
 forward={
