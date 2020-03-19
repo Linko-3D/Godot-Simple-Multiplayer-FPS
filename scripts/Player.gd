@@ -1,12 +1,16 @@
 extends KinematicBody
 
 var movement = Vector3()
+
 var speed = 10
+var walk_speed = 10
+var sprint_speed = 15
+
 var jump_force = 6.5
 
 var health = 100
 var max_ammo = 20
-var ammo = max_ammo
+var ammo = 20
 var score = 0
 
 var can_shoot = true
@@ -27,7 +31,7 @@ func _ready():
 		
 func _physics_process(delta):
 	if is_network_master():
-#		$HUD/Ammo.text = str(ammo)
+		$HUD/Ammo.text = str(ammo)
 		
 		$HUD/Health.text = str(health)
 		$HUD/Score.text = "Score: " + str(score)
@@ -35,6 +39,10 @@ func _physics_process(delta):
 		if health <= 0:
 			rpc("respawn")
 		
+		if Input.is_action_pressed("sprint"):
+			speed = sprint_speed
+		else:
+			speed = walk_speed
 		
 		var direction_2D = Vector2()
 		direction_2D.y = Input.get_action_strength("backward") - Input.get_action_strength("forward")
@@ -70,25 +78,25 @@ func _input(event):
 				$Camera.rotation_degrees.x = clamp($Camera.rotation_degrees.x, -90, 90)
 
 func other_abilities():
-	if Input.is_action_pressed("shoot"):
+	if Input.is_action_just_pressed("shoot"):
+		if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
+			if can_shoot and ammo > 0:
+				ammo -= 1
+				can_shoot = false
+				$FireRate.start()
+				rpc("shoot", $Camera/BulletPosition.global_transform, $Camera/BulletPosition.global_transform.basis.z)
+				rpc("shoot_light")
+				
+				if $Camera/RayCast.is_colliding():
+					var target = $Camera/RayCast.get_collider()
+					
+					rpc("impact", $Camera/RayCast.get_collision_point() )
+					
+					if target.has_method("damaged"):
+						target.rpc("damaged")
+						if target.health == 0:
+							rpc("scored")
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-		
-		if can_shoot and ammo > 0:
-			ammo -= 1
-			can_shoot = false
-			$FireRate.start()
-			rpc("shoot", $Camera/BulletPosition.global_transform, $Camera/BulletPosition.global_transform.basis.z)
-			rpc("shoot_light")
-			
-			if $Camera/RayCast.is_colliding():
-				var target = $Camera/RayCast.get_collider()
-				
-				rpc("impact", $Camera/RayCast.get_collision_point() )
-				
-				if target.has_method("damaged"):
-					target.rpc("damaged")
-					if target.health == 0:
-						rpc("scored")
 
 	if Input.is_action_just_pressed("ui_cancel"):
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
