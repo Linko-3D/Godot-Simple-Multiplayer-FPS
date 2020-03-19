@@ -5,6 +5,8 @@ var speed = 10
 var jump_force = 6.5
 
 var health = 100
+var max_ammo = 20
+var ammo = max_ammo
 var score = 0
 
 var can_shoot = true
@@ -22,9 +24,10 @@ func _ready():
 		$HUD.visible = true
 		$Camera/RayCast.enabled = true
 		$Camera/RayCast.add_exception(self)
-
+		
 func _physics_process(delta):
 	if is_network_master():
+#		$HUD/Ammo.text = str(ammo)
 		
 		$HUD/Health.text = str(health)
 		$HUD/Score.text = "Score: " + str(score)
@@ -70,7 +73,8 @@ func other_abilities():
 	if Input.is_action_pressed("shoot"):
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 		
-		if can_shoot:
+		if can_shoot and ammo > 0:
+			ammo -= 1
 			can_shoot = false
 			$FireRate.start()
 			rpc("shoot", $Camera/BulletPosition.global_transform, $Camera/BulletPosition.global_transform.basis.z)
