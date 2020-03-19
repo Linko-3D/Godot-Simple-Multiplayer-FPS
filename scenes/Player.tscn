@@ -3,7 +3,7 @@
 [ext_resource path="res://scripts/Player.gd" type="Script" id=1]
 [ext_resource path="res://other/crosshair.png" type="Texture" id=2]
 [ext_resource path="res://other/FiraSans-Regular.ttf" type="DynamicFontData" id=3]
-[ext_resource path="res://other/fire.wav" type="AudioStream" id=4]
+[ext_resource path="res://other/shoot.wav" type="AudioStream" id=4]
 
 [sub_resource type="CapsuleShape" id=1]
 radius = 0.5
@@ -56,6 +56,10 @@ unit_size = 100.0
 [node name="BulletPosition" type="Position3D" parent="Camera"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1 )
 
+[node name="ShootLight" type="OmniLight" parent="Camera/BulletPosition"]
+visible = false
+shadow_enabled = true
+
 [node name="HUD" type="Control" parent="."]
 visible = false
 anchor_right = 1.0
@@ -90,6 +94,6 @@ __meta__ = {
 }
 
 [node name="FireRate" type="Timer" parent="."]
-wait_time = 0.3
+wait_time = 0.25
 one_shot = true
 [connection signal="timeout" from="FireRate" to="." method="_on_FireRate_timeout"]

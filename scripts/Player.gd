@@ -74,6 +74,8 @@ func other_abilities():
 			can_shoot = false
 			$FireRate.start()
 			rpc("shoot", $Camera/BulletPosition.global_transform, $Camera/BulletPosition.global_transform.basis.z)
+			rpc("shoot_light")
+			
 			if $Camera/RayCast.is_colliding():
 				var target = $Camera/RayCast.get_collider()
 				
@@ -104,8 +106,12 @@ remotesync func shoot(emitter, direction):
 	bullet_instance.linear_velocity = direction * - 500
 	yield(get_tree().create_timer(2), "timeout")
 	bullet_instance.queue_free()
-	
 
+remotesync func shoot_light():
+	$Camera/BulletPosition/ShootLight.visible = true
+	yield(get_tree().create_timer(0.05), "timeout")
+	$Camera/BulletPosition/ShootLight.visible = false
+	
 remotesync func scored():
 	score += 1
 
