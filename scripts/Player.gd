@@ -5,6 +5,7 @@ var speed = 10
 var jump_force = 6.5
 
 var health = 100
+var score = 0
 
 puppet var puppet_transform = null
 puppet var puppet_camera_rotation = null
@@ -21,6 +22,7 @@ func _physics_process(delta):
 	if is_network_master():
 		
 		$HUD/Health.text = str(health)
+		$HUD/Score.text = "Score: " + str(score)
 		
 		if health <= 0:
 			rpc("respawn")
@@ -68,9 +70,14 @@ func other_abilities():
 			
 			if target.has_method("damaged"):
 				target.rpc("damaged")
+				if target.health == 0:
+					rpc("scored")
 
 	if Input.is_action_just_pressed("ui_cancel"):
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+
+remotesync func scored():
+	score += 1
 
 remotesync func respawn():
 	health = 100
