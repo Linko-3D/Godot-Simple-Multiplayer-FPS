@@ -67,7 +67,7 @@ func _input(event):
 				$Camera.rotation_degrees.x = clamp($Camera.rotation_degrees.x, -90, 90)
 
 func other_abilities():
-	if Input.is_action_just_pressed("shoot"):
+	if Input.is_action_pressed("shoot"):
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 		
 		if can_shoot:

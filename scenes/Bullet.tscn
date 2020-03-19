@@ -5,6 +5,8 @@
 [sub_resource type="CylinderMesh" id=1]
 top_radius = 0.001
 bottom_radius = 0.05
+radial_segments = 16
+rings = 1
 
 [node name="Bullet" type="RigidBody"]
 contacts_reported = 1

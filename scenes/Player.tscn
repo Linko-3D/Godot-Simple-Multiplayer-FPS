@@ -94,6 +94,6 @@ __meta__ = {
 }
 
 [node name="FireRate" type="Timer" parent="."]
-wait_time = 0.25
+wait_time = 0.15
 one_shot = true
 [connection signal="timeout" from="FireRate" to="." method="_on_FireRate_timeout"]

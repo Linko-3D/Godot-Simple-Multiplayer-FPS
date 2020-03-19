@@ -5,6 +5,8 @@
 [sub_resource type="SphereMesh" id=1]
 radius = 0.1
 height = 0.2
+radial_segments = 16
+rings = 8
 
 [node name="Impact" type="MeshInstance"]
 mesh = SubResource( 1 )
@@ -12,6 +14,6 @@ material/0 = null
 
 [node name="ImpactSound" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource( 1 )
-unit_db = -5.0
+unit_db = -20.0
 unit_size = 100.0
 autoplay = true
