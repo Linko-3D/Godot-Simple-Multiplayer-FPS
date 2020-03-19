@@ -65,6 +65,8 @@ func other_abilities():
 	if Input.is_action_just_pressed("shoot"):
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 		
+		rpc("shoot_sound")
+		
 		if $Camera/RayCast.is_colliding():
 			var target = $Camera/RayCast.get_collider()
 			
@@ -75,6 +77,9 @@ func other_abilities():
 
 	if Input.is_action_just_pressed("ui_cancel"):
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+
+remotesync func shoot_sound():
+	$Camera/ShootSound.play()
 
 remotesync func scored():
 	score += 1

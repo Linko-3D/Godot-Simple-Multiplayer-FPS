@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://scripts/Player.gd" type="Script" id=1]
 [ext_resource path="res://other/crosshair.png" type="Texture" id=2]
 [ext_resource path="res://other/FiraSans-Regular.ttf" type="DynamicFontData" id=3]
+[ext_resource path="res://other/fire.wav" type="AudioStream" id=4]
 
 [sub_resource type="CapsuleShape" id=1]
 radius = 0.5
@@ -45,6 +46,12 @@ material/0 = null
 
 [node name="RayCast" type="RayCast" parent="Camera"]
 cast_to = Vector3( 0, 0, -100 )
+
+[node name="ShootSound" type="AudioStreamPlayer3D" parent="Camera"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1 )
+stream = ExtResource( 4 )
+unit_db = -20.0
+unit_size = 100.0
 
 [node name="HUD" type="Control" parent="."]
 visible = false
