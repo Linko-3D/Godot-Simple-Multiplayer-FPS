@@ -1,0 +1,15 @@
+[gd_scene format=2]
+
+[node name="Map" type="Spatial"]
+
+[node name="Spawn" type="Position3D" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0 )
+
+[node name="CSGBox" type="CSGBox" parent="."]
+use_collision = true
+width = 16.0
+height = 0.002
+depth = 16.0
+
+[node name="Camera" type="Camera" parent="."]
+transform = Transform( 1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 6, 11 )
