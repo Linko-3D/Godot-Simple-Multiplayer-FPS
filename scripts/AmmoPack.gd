@@ -26,11 +26,11 @@ func _on_AmmoPack_body_entered(body):
 	if body.is_in_group("Player"):
 		if body.ammo < body.max_ammo:
 			rpc("refill_ammo", body)
+			$Timer.start()
 
 remotesync func refill_ammo(body):
 	body.ammo = body.max_ammo
 	picked = true
-	$Timer.start()
 
 func _on_Timer_timeout():
 	picked = false
