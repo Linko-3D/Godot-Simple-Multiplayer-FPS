@@ -18,9 +18,9 @@ var can_shoot = true
 var bullet = "res://scenes/Bullet.tscn"
 var impact = "res://scenes/Impact.tscn"
 
-puppet var puppet_transform = null
-puppet var puppet_camera_rotation = null
-puppet var puppet_weapon_rotation = null
+puppet var puppet_transform = transform
+puppet var puppet_camera_rotation = Vector3()
+puppet var puppet_weapon_rotation = Vector3()
 
 func _ready():
 	if is_network_master():
@@ -101,7 +101,7 @@ func other_abilities():
 				if $Camera/RayCast.is_colliding():
 					var target = $Camera/RayCast.get_collider()
 					
-					rpc("impact", $Camera/RayCast.get_collision_point() )
+					rpc("impact", $Camera/RayCast.get_collision_point(), target.has_method("damaged") )
 					
 					if target.has_method("damaged"):
 						target.rpc("damaged")
@@ -115,10 +115,11 @@ func other_abilities():
 remotesync func ammo():
 	ammo -= 1
 
-remotesync func impact(position):
+remotesync func impact(position, player):
 	var impact_instance = load(impact).instance()
 	impact_instance.global_transform.origin = position
 	get_tree().get_root().get_node("Map").add_child(impact_instance)
+	impact_instance.impact_sound(player)
 	yield(get_tree().create_timer(2), "timeout")
 	impact_instance.queue_free()
 

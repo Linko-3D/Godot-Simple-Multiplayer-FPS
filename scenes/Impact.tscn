@@ -1,6 +1,8 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://other/impact.wav" type="AudioStream" id=1]
+[ext_resource path="res://other/impact player.wav" type="AudioStream" id=2]
+[ext_resource path="res://scenes/Impact.gd" type="Script" id=3]
 
 [sub_resource type="SphereMesh" id=1]
 radius = 0.1
@@ -11,9 +13,15 @@ rings = 8
 [node name="Impact" type="MeshInstance"]
 mesh = SubResource( 1 )
 material/0 = null
+script = ExtResource( 3 )
 
 [node name="ImpactSound" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource( 1 )
 unit_db = -20.0
 unit_size = 100.0
-autoplay = true
+
+[node name="ImpactPlayerSound" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource( 2 )
+unit_db = 10.0
+unit_size = 100.0
+max_db = 5.0
