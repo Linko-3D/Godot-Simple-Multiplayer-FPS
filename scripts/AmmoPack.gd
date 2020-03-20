@@ -20,7 +20,6 @@ func _process(delta):
 	else:
 		visible = true
 		$CollisionShape.disabled = false
-	print($Timer.time_left)
 	
 func _on_AmmoPack_body_entered(body):
 	if body.is_in_group("Player"):

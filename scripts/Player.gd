@@ -23,6 +23,7 @@ puppet var puppet_camera_rotation = Vector3()
 puppet var puppet_weapon_rotation = Vector3()
 
 func _ready():
+	$HUD.visible = false
 	if is_network_master():
 		$Camera.current = true
 		$Camera/HeadOrientation.visible = false
@@ -32,6 +33,8 @@ func _ready():
 		
 func _physics_process(delta):
 	if is_network_master():
+		print(ammo)
+		
 		$HUD/Ammo.text = str(ammo)
 		
 		$HUD/Health.text = str(health)

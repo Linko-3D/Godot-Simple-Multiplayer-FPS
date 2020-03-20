@@ -18,17 +18,17 @@ top_radius = 0.1
 bottom_radius = 0.2
 height = 0.5
 
-[sub_resource type="CylinderMesh" id=6]
+[sub_resource type="CylinderMesh" id=4]
 top_radius = 0.1
 bottom_radius = 0.1
 height = 1.0
 
-[sub_resource type="DynamicFont" id=4]
+[sub_resource type="DynamicFont" id=5]
 size = 40
 font_data = ExtResource( 3 )
 
-[sub_resource type="Theme" id=5]
-default_font = SubResource( 4 )
+[sub_resource type="Theme" id=6]
+default_font = SubResource( 5 )
 
 [node name="Player" type="KinematicBody" groups=[
 "Player",
@@ -66,7 +66,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, -0.5, -0.5 )
 
 [node name="Weapon" type="MeshInstance" parent="Camera/WeaponPosition"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0 )
-mesh = SubResource( 6 )
+mesh = SubResource( 4 )
 material/0 = null
 
 [node name="BulletPosition" type="Position3D" parent="Camera/WeaponPosition/Weapon"]
@@ -79,7 +79,7 @@ shadow_enabled = true
 [node name="HUD" type="Control" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-theme = SubResource( 5 )
+theme = SubResource( 6 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
