@@ -13,6 +13,7 @@ func _physics_process(delta):
 
 func _ready():
 	get_tree().connect("network_peer_connected", self, "_on_network_peer_connected")
+	get_tree().connect("network_peer_disconnected", self, "_on_network_peer_disconnected")
 
 func create_server():
 	var peer = NetworkedMultiplayerENet.new()
@@ -46,3 +47,6 @@ func spawn_player(id):
 func _on_network_peer_connected(id):
 	if id != 1:
 		spawn_player(id)
+
+func _on_network_peer_disconnected(id):
+	get_tree().get_root().find_node(str(id), true, false). queue_free()

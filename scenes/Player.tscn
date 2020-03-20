@@ -48,7 +48,6 @@ material/0 = null
 
 [node name="HeadOrientation" type="MeshInstance" parent="Camera"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, -0.5 )
-visible = false
 mesh = SubResource( 3 )
 material/0 = null
 
