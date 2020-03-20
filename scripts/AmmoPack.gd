@@ -24,9 +24,13 @@ func _process(delta):
 	
 func _on_AmmoPack_body_entered(body):
 	if body.is_in_group("Player"):
-		picked = true
-		body.ammo = body.max_ammo
-		$Timer.start()
+		if body.ammo < body.max_ammo:
+			rpc("refill_ammo", body)
+
+remotesync func refill_ammo(body):
+	body.ammo = body.max_ammo
+	picked = true
+	$Timer.start()
 
 func _on_Timer_timeout():
 	picked = false

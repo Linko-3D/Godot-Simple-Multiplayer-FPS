@@ -20,6 +20,7 @@ var impact = "res://scenes/Impact.tscn"
 
 puppet var puppet_transform = null
 puppet var puppet_camera_rotation = null
+puppet var puppet_weapon_rotation = null
 
 func _ready():
 	if is_network_master():
@@ -65,9 +66,12 @@ func _physics_process(delta):
 		
 		rset_unreliable("puppet_transform", transform)
 		rset_unreliable("puppet_camera_rotation", $Camera.rotation)
+		rset_unreliable("puppet_weapon_rotation", $Camera/WeaponPosition.rotation)
+		
 	else:
 		transform = puppet_transform
 		$Camera.rotation = puppet_camera_rotation
+		$Camera/WeaponPosition.rotation = puppet_weapon_rotation
 
 func _input(event):
 	if is_network_master():
@@ -78,13 +82,20 @@ func _input(event):
 				$Camera.rotation_degrees.x = clamp($Camera.rotation_degrees.x, -90, 90)
 
 func other_abilities():
+	
+	if $Camera/RayCast.is_colliding():
+		$Camera/WeaponPosition.look_at($Camera/RayCast.get_collision_point(), Vector3.UP)
+	else:
+		$Camera/WeaponPosition.rotation = Vector3()
+	
+	
 	if Input.is_action_just_pressed("shoot"):
 		if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
 			if can_shoot and ammo > 0:
-				ammo -= 1
+				rpc("ammo")
 				can_shoot = false
 				$FireRate.start()
-				rpc("shoot", $Camera/BulletPosition.global_transform, $Camera/BulletPosition.global_transform.basis.z)
+				rpc("shoot", $Camera/WeaponPosition/Weapon/BulletPosition.global_transform, $Camera/WeaponPosition/Weapon/BulletPosition.global_transform.basis.z)
 				rpc("shoot_light")
 				
 				if $Camera/RayCast.is_colliding():
@@ -100,6 +111,9 @@ func other_abilities():
 
 	if Input.is_action_just_pressed("ui_cancel"):
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+
+remotesync func ammo():
+	ammo -= 1
 
 remotesync func impact(position):
 	var impact_instance = load(impact).instance()
@@ -120,9 +134,9 @@ remotesync func shoot(emitter, direction):
 	bullet_instance.queue_free()
 
 remotesync func shoot_light():
-	$Camera/BulletPosition/ShootLight.visible = true
+	$Camera/WeaponPosition/Weapon/BulletPosition/ShootLight.visible = true
 	yield(get_tree().create_timer(0.05), "timeout")
-	$Camera/BulletPosition/ShootLight.visible = false
+	$Camera/WeaponPosition/Weapon/BulletPosition/ShootLight.visible = false
 	
 remotesync func scored():
 	score += 1

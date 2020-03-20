@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://scripts/Player.gd" type="Script" id=1]
 [ext_resource path="res://other/crosshair.png" type="Texture" id=2]
@@ -17,6 +17,11 @@ mid_height = 1.5
 top_radius = 0.1
 bottom_radius = 0.2
 height = 0.5
+
+[sub_resource type="CylinderMesh" id=6]
+top_radius = 0.1
+bottom_radius = 0.1
+height = 1.0
 
 [sub_resource type="DynamicFont" id=4]
 size = 40
@@ -43,6 +48,7 @@ material/0 = null
 
 [node name="HeadOrientation" type="MeshInstance" parent="Camera"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, -0.5 )
+visible = false
 mesh = SubResource( 3 )
 material/0 = null
 
@@ -55,10 +61,18 @@ stream = ExtResource( 4 )
 unit_db = -20.0
 unit_size = 100.0
 
-[node name="BulletPosition" type="Position3D" parent="Camera"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1 )
+[node name="WeaponPosition" type="Position3D" parent="Camera"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, -0.5, -0.5 )
 
-[node name="ShootLight" type="OmniLight" parent="Camera/BulletPosition"]
+[node name="Weapon" type="MeshInstance" parent="Camera/WeaponPosition"]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0 )
+mesh = SubResource( 6 )
+material/0 = null
+
+[node name="BulletPosition" type="Position3D" parent="Camera/WeaponPosition/Weapon"]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.75, 0 )
+
+[node name="ShootLight" type="OmniLight" parent="Camera/WeaponPosition/Weapon/BulletPosition"]
 visible = false
 shadow_enabled = true
 
