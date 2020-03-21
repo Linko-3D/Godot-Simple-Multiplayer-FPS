@@ -24,14 +24,19 @@ puppet var puppet_camera_rotation = Vector3()
 puppet var puppet_weapon_rotation = Vector3()
 
 func _ready():
+	
+	get_tree().connect("network_peer_connected", self, "_on_network_peer_connected")
+	
+	
 	$HUD.visible = false
 	if is_network_master():
 		$Camera.current = true
 		$Camera/HeadOrientation.visible = false
+		$Camera/LightMesh.visible = false
 		$HUD.visible = true
 		$Camera/RayCast.enabled = true
 		$Camera/RayCast.add_exception(self)
-		
+
 func _physics_process(delta):
 	if is_network_master():
 		print(ammo)
@@ -87,6 +92,11 @@ func _input(event):
 
 func other_abilities():
 	
+	if Input.is_action_just_pressed("flashlight"):
+		$Camera/Flashlight.visible = !$Camera/Flashlight.visible
+		
+		rpc("flashlight", $Camera/Flashlight.visible)
+	
 	if $Camera/RayCast.is_colliding():
 		$Camera/WeaponPosition.look_at($Camera/RayCast.get_collision_point(), Vector3.UP)
 	else:
@@ -118,6 +128,14 @@ func other_abilities():
 
 	if Input.is_action_just_pressed("ui_cancel"):
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+
+func _on_network_peer_connected(id):
+	rpc("flashlight", $Camera/Flashlight.visible)
+
+remotesync func flashlight(status):
+	$Camera/Flashlight.visible = status
+	if not is_network_master():
+		$Camera/LightMesh.visible = status
 
 remotesync func ammo():
 	ammo -= 1

@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://scripts/Player.gd" type="Script" id=1]
 [ext_resource path="res://other/crosshair.png" type="Texture" id=2]
@@ -12,6 +12,18 @@ height = 1.5
 [sub_resource type="CapsuleMesh" id=2]
 radius = 0.5
 mid_height = 1.5
+
+[sub_resource type="CylinderMesh" id=7]
+top_radius = 0.1
+bottom_radius = 0.1
+height = 0.001
+
+[sub_resource type="SpatialMaterial" id=8]
+emission_enabled = true
+emission = Color( 1, 1, 1, 1 )
+emission_energy = 1.0
+emission_operator = 0
+emission_on_uv2 = false
 
 [sub_resource type="CylinderMesh" id=3]
 top_radius = 0.1
@@ -45,6 +57,18 @@ mesh = SubResource( 2 )
 material/0 = null
 
 [node name="Camera" type="Camera" parent="."]
+
+[node name="LightMesh" type="MeshInstance" parent="Camera"]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, -0.75 )
+cast_shadow = 0
+mesh = SubResource( 7 )
+material/0 = SubResource( 8 )
+
+[node name="Flashlight" type="SpotLight" parent="Camera"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.75 )
+shadow_enabled = true
+spot_range = 10.0
+spot_angle = 30.0
 
 [node name="HeadOrientation" type="MeshInstance" parent="Camera"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, -0.5 )
