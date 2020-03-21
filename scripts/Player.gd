@@ -17,6 +17,7 @@ var can_shoot = true
 
 var bullet = "res://scenes/Bullet.tscn"
 var impact = "res://scenes/Impact.tscn"
+var shell = "res://scenes/Shell.tscn"
 
 puppet var puppet_transform = transform
 puppet var puppet_camera_rotation = Vector3()
@@ -96,6 +97,9 @@ func other_abilities():
 		if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
 			if can_shoot and ammo > 0:
 				rpc("ammo")
+				
+				rpc("shell")
+				
 				can_shoot = false
 				$FireRate.start()
 				rpc("shoot", $Camera/WeaponPosition/Weapon/BulletPosition.global_transform, $Camera/WeaponPosition/Weapon/BulletPosition.global_transform.basis.z)
@@ -155,3 +159,13 @@ remotesync func damaged():
 
 func _on_FireRate_timeout():
 	can_shoot = true
+
+remotesync func shell():
+	var shell_instance = load(shell).instance()
+	
+	get_tree().get_root().add_child(shell_instance)
+	
+	shell_instance.global_transform = $Camera/WeaponPosition/Weapon/ShellPosition.global_transform
+	shell_instance.linear_velocity = $Camera/WeaponPosition/Weapon/ShellPosition.global_transform.basis.y * 5
+	yield(get_tree().create_timer(0.5), "timeout")
+	shell_instance.queue_free()
