@@ -1,5 +1,6 @@
 extends Node
 
+var lobby = "res://scenes/Lobby.tscn"
 var map = "res://scenes/Map.tscn"
 var player = "res://scenes/Player.tscn"
 var spawn = null
@@ -14,6 +15,7 @@ func _physics_process(delta):
 func _ready():
 	get_tree().connect("network_peer_connected", self, "_on_network_peer_connected")
 	get_tree().connect("network_peer_disconnected", self, "_on_network_peer_disconnected")
+	get_tree().connect("server_disconnected", self, "_on_server_disconnected")
 
 func create_server():
 	var peer = NetworkedMultiplayerENet.new()
@@ -50,3 +52,6 @@ func _on_network_peer_connected(id):
 
 func _on_network_peer_disconnected(id):
 	get_tree().get_root().find_node(str(id), true, false). queue_free()
+
+func _on_server_disconnected():
+	get_tree().change_scene(lobby)
