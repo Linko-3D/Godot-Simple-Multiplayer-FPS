@@ -4,6 +4,7 @@
 [ext_resource path="res://other/crosshair.png" type="Texture" id=2]
 [ext_resource path="res://other/FiraSans-Regular.ttf" type="DynamicFontData" id=3]
 [ext_resource path="res://other/shoot.wav" type="AudioStream" id=4]
+[ext_resource path="res://meshes/rifle.obj" type="ArrayMesh" id=5]
 
 [sub_resource type="CapsuleShape" id=1]
 radius = 0.5
@@ -13,34 +14,29 @@ height = 1.5
 radius = 0.5
 mid_height = 1.5
 
-[sub_resource type="CylinderMesh" id=7]
+[sub_resource type="CylinderMesh" id=3]
 top_radius = 0.1
 bottom_radius = 0.1
 height = 0.001
 
-[sub_resource type="SpatialMaterial" id=8]
+[sub_resource type="SpatialMaterial" id=4]
 emission_enabled = true
 emission = Color( 1, 1, 1, 1 )
 emission_energy = 1.0
 emission_operator = 0
 emission_on_uv2 = false
 
-[sub_resource type="CylinderMesh" id=3]
+[sub_resource type="CylinderMesh" id=5]
 top_radius = 0.1
 bottom_radius = 0.2
 height = 0.5
 
-[sub_resource type="CylinderMesh" id=4]
-top_radius = 0.1
-bottom_radius = 0.1
-height = 1.0
-
-[sub_resource type="DynamicFont" id=5]
+[sub_resource type="DynamicFont" id=6]
 size = 40
 font_data = ExtResource( 3 )
 
-[sub_resource type="Theme" id=6]
-default_font = SubResource( 5 )
+[sub_resource type="Theme" id=7]
+default_font = SubResource( 6 )
 
 [node name="Player" type="KinematicBody" groups=[
 "Player",
@@ -61,8 +57,8 @@ material/0 = null
 [node name="LightMesh" type="MeshInstance" parent="Camera"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, -0.75 )
 cast_shadow = 0
-mesh = SubResource( 7 )
-material/0 = SubResource( 8 )
+mesh = SubResource( 3 )
+material/0 = SubResource( 4 )
 
 [node name="Flashlight" type="SpotLight" parent="Camera"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.75 )
@@ -72,7 +68,7 @@ spot_angle = 30.0
 
 [node name="HeadOrientation" type="MeshInstance" parent="Camera"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, -0.5 )
-mesh = SubResource( 3 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="RayCast" type="RayCast" parent="Camera"]
@@ -85,27 +81,30 @@ unit_db = -20.0
 unit_size = 100.0
 
 [node name="WeaponPosition" type="Position3D" parent="Camera"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, -0.5, -0.5 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.530223, -0.5, -0.65498 )
 
 [node name="Weapon" type="MeshInstance" parent="Camera/WeaponPosition"]
-transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0 )
-mesh = SubResource( 4 )
+transform = Transform( -1, 0, -3.25841e-07, 0, 1, 0, 3.25841e-07, 0, -1, 0, 0, 0.263401 )
+mesh = ExtResource( 5 )
 material/0 = null
+material/1 = null
+material/2 = null
+material/3 = null
 
 [node name="BulletPosition" type="Position3D" parent="Camera/WeaponPosition/Weapon"]
-transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.75, 0 )
+transform = Transform( -1, 0, -3.25841e-07, 0, 1, 0, 3.25841e-07, 0, -1, 0, 0, 0.5 )
 
 [node name="ShootLight" type="OmniLight" parent="Camera/WeaponPosition/Weapon/BulletPosition"]
 visible = false
 shadow_enabled = true
 
 [node name="ShellPosition" type="Position3D" parent="Camera/WeaponPosition/Weapon"]
-transform = Transform( -1.62921e-07, 1, 0, -1, -1.62921e-07, 0, 0, 0, 1, 0, 0, 0 )
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -0.0531245, 0, 0.0804845 )
 
 [node name="HUD" type="Control" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-theme = SubResource( 6 )
+theme = SubResource( 7 )
 __meta__ = {
 "_edit_use_anchors_": false
 }

@@ -9,8 +9,8 @@ var sprint_speed = 15
 var jump_force = 6.5
 
 var health = 100
-var max_ammo = 20
-var ammo = 20
+var max_ammo = 30
+var ammo = max_ammo
 var score = 0
 
 var can_shoot = true
@@ -39,8 +39,6 @@ func _ready():
 
 func _physics_process(delta):
 	if is_network_master():
-		print(ammo)
-		
 		$HUD/Ammo.text = str(ammo)
 		
 		$HUD/Health.text = str(health)
@@ -103,7 +101,7 @@ func other_abilities():
 		$Camera/WeaponPosition.rotation = Vector3()
 	
 	
-	if Input.is_action_just_pressed("shoot"):
+	if Input.is_action_pressed("shoot"):
 		if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
 			if can_shoot and ammo > 0:
 				rpc("ammo")
@@ -184,6 +182,6 @@ remotesync func shell():
 	get_tree().get_root().add_child(shell_instance)
 	
 	shell_instance.global_transform = $Camera/WeaponPosition/Weapon/ShellPosition.global_transform
-	shell_instance.linear_velocity = $Camera/WeaponPosition/Weapon/ShellPosition.global_transform.basis.y * 5
+	shell_instance.linear_velocity = $Camera/WeaponPosition/Weapon/ShellPosition.global_transform.basis.z * 5
 	yield(get_tree().create_timer(0.5), "timeout")
 	shell_instance.queue_free()
