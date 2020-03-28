@@ -119,7 +119,7 @@ func other_abilities():
 					rpc("impact", $Camera/RayCast.get_collision_point(), target.has_method("damaged") )
 					
 					if target.has_method("damaged"):
-						target.rpc("damaged")
+						target.rpc("damaged", 25)
 						if target.health == 0:
 							rpc("scored")
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -169,8 +169,8 @@ remotesync func respawn():
 	health = 100
 	global_transform = get_tree().get_root().find_node("Spawn", true, false). global_transform
 
-remotesync func damaged():
-	health -= 25
+remotesync func damaged(amount):
+	health -= amount
 
 
 func _on_FireRate_timeout():

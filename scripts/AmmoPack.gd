@@ -12,7 +12,7 @@ func _process(delta):
 	else:
 		picked = puppet_picked
 
-	rotate_y(-0.025)
+	rotate_y(-0.05)
 
 	if picked:
 		visible = false

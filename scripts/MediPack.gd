@@ -1,6 +1,8 @@
 extends Area
 
 var picked = false
+
+puppet var puppet_transform = transform
 puppet var puppet_picked = false
 
 func _ready():
@@ -8,8 +10,11 @@ func _ready():
 
 func _process(delta):
 	if is_network_master():
+		rotate_y(0.05)
+		rset("puppet_transform", transform)
 		rset("puppet_picked", picked)
 	else:
+		transform = puppet_transform
 		picked = puppet_picked
 
 	if picked:
