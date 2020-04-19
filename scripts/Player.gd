@@ -153,7 +153,7 @@ remotesync func shoot(emitter, direction):
 	
 	get_tree().get_root().get_node("Map").add_child(bullet_instance)
 	bullet_instance.global_transform = emitter
-	bullet_instance.linear_velocity = direction * - 500
+	bullet_instance.linear_velocity = direction * - 200
 	yield(get_tree().create_timer(2), "timeout")
 	bullet_instance.queue_free()
 
@@ -182,6 +182,6 @@ remotesync func shell():
 	get_tree().get_root().add_child(shell_instance)
 	
 	shell_instance.global_transform = $Camera/WeaponPosition/Weapon/ShellPosition.global_transform
-	shell_instance.linear_velocity = $Camera/WeaponPosition/Weapon/ShellPosition.global_transform.basis.z * 5
+	shell_instance.linear_velocity = $Camera/WeaponPosition/Weapon/ShellPosition.global_transform.basis.x * -5
 	yield(get_tree().create_timer(0.5), "timeout")
 	shell_instance.queue_free()

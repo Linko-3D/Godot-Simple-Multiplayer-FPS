@@ -1,34 +1,27 @@
 extends KinematicBody
 
-puppet var puppet_transform = transform
-puppet var puppet_visibility = true
-puppet var puppet_collision = false
-
-var agro = 999
-var target = null
-
-var health = 100
-
-func _ready():
-	set_network_master(1)
-
-func _process(delta):
-	if is_network_master():
-		if health <= 0:
-			visible = false
-			$CollisionShape.disabled = true
+func _physics_process(delta):
+	var group = get_tree().get_nodes_in_group("Player")
+	
+	if group.size() == 0:
+		return
 		
-		if get_tree().get_nodes_in_group("Player"):
-			var player = get_tree().get_nodes_in_group("Player")[0]
-			
-			look_at(player.global_transform.origin, Vector3.UP)
-		rset_unreliable("puppet_transform", transform)
-		rset_unreliable("puppet_visibility", visible)
-		rset_unreliable("puppet_collision", $CollisionShape.disabled)
-	else:
-		transform = puppet_transform
-		visible = puppet_visibility
-		$CollisionShape.disabled = puppet_collision
+	var nearest = get_nearest(group)
+	look_at(nearest.global_transform.origin, Vector3.UP)
+	
+	var vector = nearest.global_transform.origin - global_transform.origin
+	vector = vector.normalized()
+	move_and_collide(vector * 100 * delta)
 
-remotesync func damaged(amount):
-	health -= amount
+func get_nearest(group):
+	var nearest = group[0]
+
+	for target in group:
+		var target_distance = global_transform.origin.distance_to(target.global_transform.origin)
+		var nearest_distance = global_transform.origin.distance_to(nearest.global_transform.origin)
+
+		if target_distance < nearest_distance:
+			nearest = target
+
+	return nearest
+

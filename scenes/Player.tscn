@@ -99,7 +99,7 @@ visible = false
 shadow_enabled = true
 
 [node name="ShellPosition" type="Position3D" parent="Camera/WeaponPosition/Weapon"]
-transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -0.0531245, 0, 0.0804845 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0531245, 0, 0.0804845 )
 
 [node name="HUD" type="Control" parent="."]
 anchor_right = 1.0
